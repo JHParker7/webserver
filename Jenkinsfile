@@ -8,9 +8,9 @@ pipeline {
     stages {
         stage('Build') {
             steps {
-                sh "apk update"
-               sh "apk install nodejs"
-               sh "apk install npm"
+                sh "sudo apk update"
+               sh "sudo apk install nodejs"
+               sh "sudo apk install npm"
             }
         }
         stage('Test') {
