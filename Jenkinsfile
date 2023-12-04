@@ -1,16 +1,16 @@
 pipeline {
     agent {
         docker {
-            image 'alpine' 
+            image 'ubuntu:latest' 
             args '-p 3000:3000' 
         }
     }
     stages {
         stage('Build') {
             steps {
-                sh "sudo apk update"
-               sh "sudo apk install nodejs"
-               sh "sudo apk install npm"
+                sh "apt-get update"
+               sh "apt-get install nodejs"
+               sh "apt-get install npm"
             }
         }
         stage('Test') {
