@@ -1,11 +1,15 @@
 pipeline {
-    agent any
+    agent {
+        docker {
+            image 'node:21-alpine3.17' 
+            args '-p 3000:3000' 
+        }
+    }
     stages {
         stage('Build') {
             steps {
-               sh "docker build app"
-               sh "docker run app"
-               echo "app running"
+               sh "cd app; npm install"
+               sh "cd app; npm start"
             }
         }
         stage('Test') {
