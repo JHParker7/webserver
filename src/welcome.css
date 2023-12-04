@@ -1,0 +1,58 @@
+@media screen and (min-width: 1200px){
+div#Welcome h3 img{
+    width: 2.5vh;
+}
+
+div#Welcome h3 {
+    font-size: 2.5vh;
+    margin: 1vh;
+}
+
+div#Welcome h1 {
+    margin-top: 20vh;
+    margin-bottom: 5vh;
+    font-size: 10vh;
+    text-decoration: underline;
+
+}
+
+div#Welcome p {
+    margin: 1vh;
+    font-size: 1.5vh;
+}
+
+div#Welcome h4 {
+    font-size: 2vh;
+    margin: 1vh;
+    margin-top: 20vh;
+}}
+
+@media screen and (max-width: 1200px){
+    div#Welcome h3 img{
+        width: 2.5vh;
+    }
+    
+    div#Welcome h3 {
+        font-size: 2.5vh;
+        margin: 1vh;
+    }
+    
+    div#Welcome h1 {
+        margin-top: 20vh;
+        margin-bottom: 5vh;
+        font-size: 5vh;
+        text-decoration: underline;
+    
+    }
+    
+    div#Welcome p {
+        margin: 1vh;
+        font-size: 1.5vh;
+    }
+    
+    div#Welcome h4 {
+        font-size: 2vh;
+        margin: 1vh;
+        margin-top: 20vh;
+    }
+}
