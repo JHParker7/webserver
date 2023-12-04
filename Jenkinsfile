@@ -4,7 +4,8 @@ pipeline {
     stages {
         stage('Build') {
             steps {
-                echo 'Building..'
+                sudo apt update
+                sudo apt install nodejs
             }
         }
         stage('Test') {
