@@ -3,7 +3,9 @@ pipeline {
     stages {
         stage('Build') {
             steps {
-               sh "cd jacks-site;npm cache clean -f;npm install;npm run build"
+               sh "docker build app"
+               sh "docker run app"
+               echo "app running"
             }
         }
         stage('Test') {
