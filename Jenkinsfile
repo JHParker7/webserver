@@ -10,7 +10,7 @@ pipeline {
             steps {
                sh "cd app; npm install"
                sh "cd app; npm audit fix --force"
-               sh "cd app; npm start"
+               sh "cd app; npm run build"
             }
         }
         stage('Test') {
