@@ -9,9 +9,7 @@ pipeline {
         stage('Build') {
             steps {
                sh "npm cache clean -f"
-               sh "npm install -g n"
-               sh "n stable"
-               sh "pm install --unsafe-perm=true --allow-root"
+               sh "npm install"
                sh "npm run build"
             }
         }
