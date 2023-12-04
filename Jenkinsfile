@@ -8,10 +8,10 @@ pipeline {
     stages {
         stage('Build') {
             steps {
-               sh "sudo npm cache clean -f"
-               sh "sudo npm install -g n"
-               sh "sudo n stable"
-               sh "sudo npm install --unsafe-perm=true --allow-root"
+               sh "npm cache clean -f"
+               sh "npm install -g n"
+               sh "n stable"
+               sh "pm install --unsafe-perm=true --allow-root"
                sh "npm run build"
             }
         }
