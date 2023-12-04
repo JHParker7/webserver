@@ -1,11 +1,8 @@
-import { createRoot } from "react-dom/client";
-import React, { useRef, useState, useEffect } from "react";
-import { Canvas, extend, useFrame } from "@react-three/fiber";
+import React, { useRef, useEffect } from "react";
 import * as THREE from "three";
 import { randInt } from "three/src/math/MathUtils";
 import { OrbitControls } from "three/addons/controls/OrbitControls.js";
 import CANNON from "cannon";
-import { wait } from "@testing-library/user-event/dist/utils";
 
 function ThreeExp() {
   const refContainer = useRef(); //;

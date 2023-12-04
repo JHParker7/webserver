@@ -1,10 +1,8 @@
-import React, { useRef, useState } from "react";
-import { createRoot } from 'react-dom/client'
+import React from "react";
 import ReactDOM from "react-dom/client";
 import "./index.css";
 import Background from "./Three_background.js";
 import reportWebVitals from "./reportWebVitals";
-import { Color } from "three";
 import Intro from "./Intro.js";
 import Welcome from "./Welcome.js";
 import Badges from "./Badges.js"
