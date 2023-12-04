@@ -1,16 +1,14 @@
 pipeline {
     agent {
         docker {
-            image 'ubuntu:latest' 
+            image 'node:20.10.0-alpine3.18' 
             args '-p 3000:3000' 
         }
     }
     stages {
         stage('Build') {
             steps {
-                sh "apt-get update"
-               sh "apt-get install nodejs"
-               sh "apt-get install npm"
+               sh "ls"
             }
         }
         stage('Test') {
