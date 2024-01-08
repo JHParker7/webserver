@@ -13,8 +13,8 @@ function ThreeExp() {
         gravity: new CANNON.Vec3(0, -9.82, 0), // m/s²
       });
 
-      var row_len = 30;
-      var col_len = 30;
+      var row_len = 5;
+      var col_len = 5;
 
       var map = Array(row_len + 2)
         .fill()
@@ -75,29 +75,60 @@ function ThreeExp() {
       var dead_end_count = 0;
       var x = randInt(1, x_len);
       var y = randInt(1, y_len);
-
-      while (no_way_out) {
-        console.log(no_way_out)
-        var findPath = find_path(0, 0, 0);
-        if (findPath === "dead_end") {
-          dead_end_count = dead_end_count + 1;
-
-          //console.log("dead_end")
-          if (dead_end_count > 2000) {
-            no_way_out = false;
-          } else {
-            x = randInt(1, x_len);
-            y = randInt(1, y_len);
-            if (x!==x_len && y!==y_len){
-            map[y][x] = 0;
-            no_way_out = true;}
-          }
-        } else if (findPath === false) {
-          no_way_out = false;
-          //console.log(map)
-        } else {no_way_out = false;
-        console.log(no_way_out)
-      }
+      var to_check = [[1,1]]
+      var to_check_str = [String([1,1])]
+      var checked = []
+      function find_exit(map,to_check,current_x,current_y,to_check_str,checked){
+      if (map[current_x+1][current_y]===2 && !(checked.some(r=> r===String([current_x+1,current_y]))) && !(to_check_str.some(r=> r===String([current_x+1,current_y])))){
+          let pos = [current_x+1,current_y]
+          console.log("END FOUND!!!!!!!!!!!!!!!!")
+        }
+        if (map[current_x-1][current_y]===2 && !(checked.some(r=> r===String([current_x-1,current_y]))) && !(to_check_str.some(r=> r===String([current_x-1,current_y])))){
+          let pos = [current_x-1,current_y]
+          console.log("END FOUND!!!!!!!!!!!!!!!!")
+        }
+        if (map[current_x][current_y+1]===2 && !(checked.some(r=> r===String([current_x,current_y+1]))) && !(to_check_str.some(r=> r===String([current_x,current_y+1])))){
+          let pos = [current_x,current_y+1]
+          console.log("END FOUND!!!!!!!!!!!!!!!!")
+        }
+        if (map[current_x][current_y-1]===2 && !(checked.some(r=> r===String([current_x,current_y-1]))) && !(to_check_str.some(r=> r===String([current_x,current_y-1])))){
+          let pos = [current_x,current_y-1]
+          console.log("END FOUND!!!!!!!!!!!!!!!!")
+        }
+        if (map[current_x+1][current_y]===0 && !(checked.some(r=> r===String([current_x+1,current_y]))) && !(to_check_str.some(r=> r===String([current_x+1,current_y])))){
+          let pos = [current_x+1,current_y]
+          to_check.push(pos)
+          to_check_str.push(String(pos))
+        }
+        if (map[current_x-1][current_y]===0 && !(checked.some(r=> r===String([current_x-1,current_y]))) && !(to_check_str.some(r=> r===String([current_x-1,current_y])))){
+          let pos = [current_x-1,current_y]
+          to_check.push(pos)
+          to_check_str.push(String(pos))
+        }
+        if (map[current_x][current_y+1]===0 && !(checked.some(r=> r===String([current_x,current_y+1]))) && !(to_check_str.some(r=> r===String([current_x,current_y+1])))){
+          let pos = [current_x,current_y+1]
+          to_check.push(pos)
+          to_check_str.push(String(pos))
+        }
+        if (map[current_x][current_y-1]===0 && !(checked.some(r=> r===String([current_x,current_y-1]))) && !(to_check_str.some(r=> r===String([current_x,current_y-1])))){
+          let pos = [current_x,current_y-1]
+          to_check.push(pos)
+          to_check_str.push(String(pos))
+        }}
+        var temp=20
+      while (temp!==0) {
+        var pos = to_check[0]
+        var current_x = pos[0]
+        var current_y = pos[1]
+        console.log(pos)
+        find_exit(map,to_check,current_x,current_y,to_check_str,checked)
+        checked.push(String(to_check[0]))
+        to_check.shift()
+        to_check_str.shift()
+        temp=temp-1
+        if (to_check_str.length===0) {
+          break
+        }
       }
 
       /*
