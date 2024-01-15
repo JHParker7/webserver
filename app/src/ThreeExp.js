@@ -50,85 +50,141 @@ function ThreeExp() {
 
       scene.add(Goal);
 
-      var n = map.length*map[0].length;
-      var path = [];
-
-      function find_path(i, j, path_length) {
-        if (path.length < n) {
-          return "dead_end";
-        } else if (map[i][j] === 2) {
-          return true;
-        }
-        for (let k = 0; k > n; k++) {
-          if (map[i][k] === 0 || map[i][k] === 0) {
-            if (find_path(k, j, path_length + 1)) {
-              return true;
-            }
-          }
-        }
-        return false;
-      }
-
       var y_len = map.length - 2;
       var x_len = map[0].length - 2;
       var no_way_out = true;
-      var dead_end_count = 0;
       var x = randInt(1, x_len);
       var y = randInt(1, y_len);
-      var to_check = [[1,1]]
-      var to_check_str = [String([1,1])]
-      var checked = []
-      function find_exit(map,to_check,current_x,current_y,to_check_str,checked){
-      if (map[current_x+1][current_y]===2 && !(checked.some(r=> r===String([current_x+1,current_y]))) && !(to_check_str.some(r=> r===String([current_x+1,current_y])))){
-          let pos = [current_x+1,current_y]
-          console.log("END FOUND!!!!!!!!!!!!!!!!")
+      function find_exit(
+        map,
+        to_check,
+        current_x,
+        current_y,
+        to_check_str,
+        checked
+      ) {
+        console.log(1)
+        if (
+          map[current_x + 1][current_y] === 2 &&
+          !checked.some((r) => r === String([current_x + 1, current_y])) &&
+          !to_check_str.some((r) => r === String([current_x + 1, current_y]))
+        ) {
+          console.log("END FOUND!!!!!!!!!!!!!!!!");
+          no_way_out = false;
+          return
         }
-        if (map[current_x-1][current_y]===2 && !(checked.some(r=> r===String([current_x-1,current_y]))) && !(to_check_str.some(r=> r===String([current_x-1,current_y])))){
-          let pos = [current_x-1,current_y]
-          console.log("END FOUND!!!!!!!!!!!!!!!!")
+        console.log(2)
+        if (
+          map[current_x - 1][current_y] === 2 &&
+          !checked.some((r) => r === String([current_x - 1, current_y])) &&
+          !to_check_str.some((r) => r === String([current_x - 1, current_y]))
+        ) {
+          console.log("END FOUND!!!!!!!!!!!!!!!!");
+          no_way_out = false;
+          return
         }
-        if (map[current_x][current_y+1]===2 && !(checked.some(r=> r===String([current_x,current_y+1]))) && !(to_check_str.some(r=> r===String([current_x,current_y+1])))){
-          let pos = [current_x,current_y+1]
-          console.log("END FOUND!!!!!!!!!!!!!!!!")
+        if (
+          map[current_x][current_y + 1] === 2 &&
+          !checked.some((r) => r === String([current_x, current_y + 1])) &&
+          !to_check_str.some((r) => r === String([current_x, current_y + 1]))
+        ) {
+          console.log("END FOUND!!!!!!!!!!!!!!!!");
+          no_way_out = false;
+          return
         }
-        if (map[current_x][current_y-1]===2 && !(checked.some(r=> r===String([current_x,current_y-1]))) && !(to_check_str.some(r=> r===String([current_x,current_y-1])))){
-          let pos = [current_x,current_y-1]
-          console.log("END FOUND!!!!!!!!!!!!!!!!")
+        if (
+          map[current_x][current_y - 1] === 2 &&
+          !checked.some((r) => r === String([current_x, current_y - 1])) &&
+          !to_check_str.some((r) => r === String([current_x, current_y - 1]))
+        ) {
+          console.log("END FOUND!!!!!!!!!!!!!!!!");
+          no_way_out = false;
+          return
         }
-        if (map[current_x+1][current_y]===0 && !(checked.some(r=> r===String([current_x+1,current_y]))) && !(to_check_str.some(r=> r===String([current_x+1,current_y])))){
-          let pos = [current_x+1,current_y]
-          to_check.push(pos)
-          to_check_str.push(String(pos))
+        console.log(3)
+        if (
+          map[current_x + 1][current_y] === 0 &&
+          !checked.some((r) => r === String([current_x + 1, current_y])) &&
+          !to_check_str.some((r) => r === String([current_x + 1, current_y]))
+        ) {
+          let pos = [current_x + 1, current_y];
+          to_check.push(pos);
+          to_check_str.push(String(pos));
         }
-        if (map[current_x-1][current_y]===0 && !(checked.some(r=> r===String([current_x-1,current_y]))) && !(to_check_str.some(r=> r===String([current_x-1,current_y])))){
-          let pos = [current_x-1,current_y]
-          to_check.push(pos)
-          to_check_str.push(String(pos))
+        if (
+          map[current_x - 1][current_y] === 0 &&
+          !checked.some((r) => r === String([current_x - 1, current_y])) &&
+          !to_check_str.some((r) => r === String([current_x - 1, current_y]))
+        ) {
+          let pos = [current_x - 1, current_y];
+          to_check.push(pos);
+          to_check_str.push(String(pos));
         }
-        if (map[current_x][current_y+1]===0 && !(checked.some(r=> r===String([current_x,current_y+1]))) && !(to_check_str.some(r=> r===String([current_x,current_y+1])))){
-          let pos = [current_x,current_y+1]
-          to_check.push(pos)
-          to_check_str.push(String(pos))
+        if (
+          map[current_x][current_y + 1] === 0 &&
+          !checked.some((r) => r === String([current_x, current_y + 1])) &&
+          !to_check_str.some((r) => r === String([current_x, current_y + 1]))
+        ) {
+          let pos = [current_x, current_y + 1];
+          to_check.push(pos);
+          to_check_str.push(String(pos));
         }
-        if (map[current_x][current_y-1]===0 && !(checked.some(r=> r===String([current_x,current_y-1]))) && !(to_check_str.some(r=> r===String([current_x,current_y-1])))){
-          let pos = [current_x,current_y-1]
-          to_check.push(pos)
-          to_check_str.push(String(pos))
-        }}
-        var temp=20
-      while (temp!==0) {
-        var pos = to_check[0]
-        var current_x = pos[0]
-        var current_y = pos[1]
-        console.log(pos)
-        find_exit(map,to_check,current_x,current_y,to_check_str,checked)
-        checked.push(String(to_check[0]))
-        to_check.shift()
-        to_check_str.shift()
-        temp=temp-1
-        if (to_check_str.length===0) {
-          break
+        if (
+          map[current_x][current_y - 1] === 0 &&
+          !checked.some((r) => r === String([current_x, current_y - 1])) &&
+          !to_check_str.some((r) => r === String([current_x, current_y - 1]))
+        ) {
+          let pos = [current_x, current_y - 1];
+          to_check.push(pos);
+          to_check_str.push(String(pos));
         }
+      }
+      var temp = 10;
+      function is_there_a_way_out() {
+        while (true) {
+          var pos = to_check[0];
+          var current_x = pos[0];
+          var current_y = pos[1];
+          console.log(7)
+          find_exit(map, to_check, current_x, current_y, to_check_str, checked);
+          if (no_way_out === false) {
+            console.log("abc");
+            return;
+          }
+          to_check.shift();
+          to_check_str.shift();
+          if (to_check_str.length === 0) {
+            console.log("no way out");
+            return;
+          }
+          checked.push(String(to_check[0]));
+        }
+      }
+
+      function remove_random_wall() {
+        let ran_row = randInt(1, row_len);
+        let ran_col = randInt(1, col_len);
+        while (map[ran_row][ran_col] !== 1) {
+          ran_row = randInt(1, row_len);
+          ran_col = randInt(1, col_len);
+        }
+        map[ran_row][ran_col] = 0;
+        return (ran_row,ran_col);
+      }
+      while (no_way_out === true) {
+        var to_check = [[1, 1]];
+        var to_check_str = [String([1, 1])];
+        var checked = [];
+        console.log(        map,
+          to_check,
+          to_check_str,
+          checked)
+        is_there_a_way_out();
+        console.log("123")
+        if (no_way_out === false) {
+          break;
+        }
+        remove_random_wall();
       }
 
       /*
@@ -313,6 +369,9 @@ function ThreeExp() {
         renderer.render(scene, camera);
 
         window.requestAnimationFrame(renderloop);
+        if (player_box.position.x>(row_len/2)-0.5 && player_box.position.z>(col_len/2)-0.5){
+          console.log(true)
+        }
       };
       //  width: 80vw;
       //height: 80vh;
