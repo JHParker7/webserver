@@ -7,3 +7,17 @@ div#ThreeExp.section:hover {
 div#ThreeExp.section canvas{
     border-radius: 5vh;
 }
+
+div#GOAL {
+  position: absolute;
+  left: 10vw;
+  top: 0px;
+  display: inline-block;
+  background-color: none;
+  border-radius: 5vh;
+  width: 60vw;
+  height: 60vh;
+  margin-top: 10vh;
+  text-align: center;
+  font-size: 8vw;
+}

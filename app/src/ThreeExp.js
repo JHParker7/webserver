@@ -1,20 +1,27 @@
 import React, { useRef, useEffect } from "react";
 import * as THREE from "three";
-import { randInt } from "three/src/math/MathUtils";
+import { ceilPowerOfTwo, randInt } from "three/src/math/MathUtils";
 import { OrbitControls } from "three/addons/controls/OrbitControls.js";
 import CANNON from "cannon";
+import $ from 'jquery'
 
+var row_len = 20;
+var col_len = 20;
+const Goal_text = document.createTextNode("GOAL!!!!!!!")
+const Goal_done = document.createElement("div")
+Goal_done.setAttribute("id","GOAL")
+Goal_done.appendChild(Goal_text)
+function updateDiv()
+{ 
+    $( "#ThreeExp" ).load(window.location.href + "#ThreeExp" );
+}
 function ThreeExp() {
   const refContainer = useRef(); //;
-
   useEffect(() => {
     if (document.getElementById("ThreeExp").childNodes.length === 0) {
       var world = new CANNON.World({
         gravity: new CANNON.Vec3(0, -9.82, 0), // m/s²
       });
-
-      var row_len = 5;
-      var col_len = 5;
 
       var map = Array(row_len + 2)
         .fill()
@@ -36,9 +43,6 @@ function ThreeExp() {
           }
         }
       }
-
-      console.log(map);
-
       const scene = new THREE.Scene();
       const GoalGeometry = new THREE.BoxGeometry(1, 1, 1);
       const GoalMaterial = new THREE.MeshLambertMaterial({ color: "green" });
@@ -63,23 +67,19 @@ function ThreeExp() {
         to_check_str,
         checked
       ) {
-        console.log(1)
         if (
           map[current_x + 1][current_y] === 2 &&
           !checked.some((r) => r === String([current_x + 1, current_y])) &&
           !to_check_str.some((r) => r === String([current_x + 1, current_y]))
         ) {
-          console.log("END FOUND!!!!!!!!!!!!!!!!");
           no_way_out = false;
           return
         }
-        console.log(2)
         if (
           map[current_x - 1][current_y] === 2 &&
           !checked.some((r) => r === String([current_x - 1, current_y])) &&
           !to_check_str.some((r) => r === String([current_x - 1, current_y]))
         ) {
-          console.log("END FOUND!!!!!!!!!!!!!!!!");
           no_way_out = false;
           return
         }
@@ -88,7 +88,6 @@ function ThreeExp() {
           !checked.some((r) => r === String([current_x, current_y + 1])) &&
           !to_check_str.some((r) => r === String([current_x, current_y + 1]))
         ) {
-          console.log("END FOUND!!!!!!!!!!!!!!!!");
           no_way_out = false;
           return
         }
@@ -97,11 +96,9 @@ function ThreeExp() {
           !checked.some((r) => r === String([current_x, current_y - 1])) &&
           !to_check_str.some((r) => r === String([current_x, current_y - 1]))
         ) {
-          console.log("END FOUND!!!!!!!!!!!!!!!!");
           no_way_out = false;
           return
         }
-        console.log(3)
         if (
           map[current_x + 1][current_y] === 0 &&
           !checked.some((r) => r === String([current_x + 1, current_y])) &&
@@ -145,16 +142,13 @@ function ThreeExp() {
           var pos = to_check[0];
           var current_x = pos[0];
           var current_y = pos[1];
-          console.log(7)
           find_exit(map, to_check, current_x, current_y, to_check_str, checked);
           if (no_way_out === false) {
-            console.log("abc");
             return;
           }
           to_check.shift();
           to_check_str.shift();
           if (to_check_str.length === 0) {
-            console.log("no way out");
             return;
           }
           checked.push(String(to_check[0]));
@@ -175,12 +169,7 @@ function ThreeExp() {
         var to_check = [[1, 1]];
         var to_check_str = [String([1, 1])];
         var checked = [];
-        console.log(        map,
-          to_check,
-          to_check_str,
-          checked)
         is_there_a_way_out();
-        console.log("123")
         if (no_way_out === false) {
           break;
         }
@@ -284,7 +273,6 @@ function ThreeExp() {
 
       document.addEventListener("keydown", onDocumentKeyDown, false);
       function onDocumentKeyDown(event) {
-        console.log(event.which);
         var keyCode = event.which;
         var direction = new THREE.Vector3();
         var vec = camera.getWorldDirection(direction);
@@ -332,6 +320,9 @@ function ThreeExp() {
       const controls = new OrbitControls(camera, renderer.domElement);
       controls.enableDamping = true;
 
+      var goal_div_exist=0
+
+
       const renderloop = () => {
         camera.lookAt(player.position);
         //player_box.velocity.x=0
@@ -369,8 +360,10 @@ function ThreeExp() {
         renderer.render(scene, camera);
 
         window.requestAnimationFrame(renderloop);
-        if (player_box.position.x>(row_len/2)-0.5 && player_box.position.z>(col_len/2)-0.5){
-          console.log(true)
+        if (player_box.position.x>(row_len/2)-0.5 && player_box.position.z>(col_len/2)-0.5 && goal_div_exist===0){
+          document.getElementById("ThreeExp").appendChild(Goal_done)
+          goal_div_exist=1
+          updateDiv()
         }
       };
       //  width: 80vw;
