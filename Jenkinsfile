@@ -15,12 +15,12 @@ pipeline {
         }
         stage('Test') {
             steps {
-                echo 'Testing..'
+                sh "flask --app api run; pytest"
             }
         }
         stage('Deploy') {
             steps {
-                echo 'Deploying....'
+                sh "docker compose up"
             }
         }
     }
