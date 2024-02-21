@@ -3,17 +3,18 @@ import * as THREE from "three";
 import { ceilPowerOfTwo, randInt } from "three/src/math/MathUtils";
 import { OrbitControls } from "three/addons/controls/OrbitControls.js";
 import CANNON from "cannon";
-import $ from 'jquery'
+import $ from "jquery";
 
 var row_len = 20;
 var col_len = 20;
-const Goal_text = document.createTextNode("GOAL!!!!!!!")
-const Goal_done = document.createElement("div")
-Goal_done.setAttribute("id","GOAL")
-Goal_done.appendChild(Goal_text)
-function updateDiv()
-{ 
-    $( "#ThreeExp" ).load(window.location.href + "#ThreeExp" );
+const Goal_text = document.createTextNode("GOAL!!!!!!!");
+const retry = document.createTextNode("Press 'Q' to play again");
+const Goal_done = document.createElement("div");
+Goal_done.setAttribute("id", "GOAL");
+Goal_done.appendChild(Goal_text);
+Goal_done.appendChild(retry);
+function updateDiv() {
+  $("#ThreeExp").load(window.location.href + "#ThreeExp");
 }
 function ThreeExp() {
   const refContainer = useRef(); //;
@@ -73,7 +74,7 @@ function ThreeExp() {
           !to_check_str.some((r) => r === String([current_x + 1, current_y]))
         ) {
           no_way_out = false;
-          return
+          return;
         }
         if (
           map[current_x - 1][current_y] === 2 &&
@@ -81,7 +82,7 @@ function ThreeExp() {
           !to_check_str.some((r) => r === String([current_x - 1, current_y]))
         ) {
           no_way_out = false;
-          return
+          return;
         }
         if (
           map[current_x][current_y + 1] === 2 &&
@@ -89,7 +90,7 @@ function ThreeExp() {
           !to_check_str.some((r) => r === String([current_x, current_y + 1]))
         ) {
           no_way_out = false;
-          return
+          return;
         }
         if (
           map[current_x][current_y - 1] === 2 &&
@@ -97,7 +98,7 @@ function ThreeExp() {
           !to_check_str.some((r) => r === String([current_x, current_y - 1]))
         ) {
           no_way_out = false;
-          return
+          return;
         }
         if (
           map[current_x + 1][current_y] === 0 &&
@@ -163,7 +164,7 @@ function ThreeExp() {
           ran_col = randInt(1, col_len);
         }
         map[ran_row][ran_col] = 0;
-        return (ran_row,ran_col);
+        return ran_row, ran_col;
       }
       while (no_way_out === true) {
         var to_check = [[1, 1]];
@@ -176,6 +177,19 @@ function ThreeExp() {
         remove_random_wall();
       }
 
+      const form = {}
+      console.log(map.length)
+      for(let index=0;index<map.length;index++){
+        console.log(index)
+        console.log(map[index])
+        index=String(index)
+        form[index]=map[index]
+      }
+      console.log(form)
+
+      fetch("/save_map",{method:"POST",headers: {
+        'Content-type': 'application/json; charset=UTF-8' // Indicates the content 
+       },body:JSON.stringify({"data":form})})
       /*
       
       def find_path(i, j, path_length):
@@ -281,6 +295,8 @@ function ThreeExp() {
 
         var vec_sum = Math.atan(vec_x / vec_z) * (180 / Math.PI);
 
+        //console.log(keyCode);
+
         if (keyCode === 87) {
           player_box.velocity.z -= ySpeed;
         } else if (keyCode === 83) {
@@ -289,6 +305,9 @@ function ThreeExp() {
           player_box.velocity.x -= xSpeed;
         } else if (keyCode === 68) {
           player_box.velocity.x += xSpeed;
+        } else if (keyCode === 81 && goal_div_exist===1) {
+          console.log("retry")
+          updateDiv()
         }
       }
 
@@ -320,8 +339,7 @@ function ThreeExp() {
       const controls = new OrbitControls(camera, renderer.domElement);
       controls.enableDamping = true;
 
-      var goal_div_exist=0
-
+      var goal_div_exist = 0;
 
       const renderloop = () => {
         camera.lookAt(player.position);
@@ -360,10 +378,14 @@ function ThreeExp() {
         renderer.render(scene, camera);
 
         window.requestAnimationFrame(renderloop);
-        if (player_box.position.x>(row_len/2)-0.5 && player_box.position.z>(col_len/2)-0.5 && goal_div_exist===0){
-          document.getElementById("ThreeExp").appendChild(Goal_done)
-          goal_div_exist=1
-          updateDiv()
+        if (
+          player_box.position.x > row_len / 2 - 0.5 &&
+          player_box.position.z > col_len / 2 - 0.5 &&
+          goal_div_exist === 0
+        ) {
+          document.getElementById("ThreeExp").appendChild(Goal_done);
+          goal_div_exist = 1;
+          // updateDiv()
         }
       };
       //  width: 80vw;
