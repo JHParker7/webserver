@@ -31,7 +31,7 @@ def webmedia(path):
 def save_map():
     data=request.json["data"]
     data=["|".join([str(x) for x in data[x]]) for x in data]
-    open("/home/jack/Projects/AI/Maze_AI/maps/"+str(time.time())+".txt","tw+").write("<".join(data))
+    open("training_maps/"+str(time.time())+".txt","tw+").write("<".join(data))
     return "saved"
 
 if __name__ == '__main__':  
