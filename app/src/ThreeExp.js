@@ -137,7 +137,6 @@ function ThreeExp() {
           to_check_str.push(String(pos));
         }
       }
-      var temp = 10;
       function is_there_a_way_out() {
         while (true) {
           var pos = to_check[0];
