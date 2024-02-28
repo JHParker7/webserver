@@ -25,3 +25,9 @@ yarn-error.log*
 .vscode/settings.json
 app/package-lock.json
 training_data.pkl
+neat-checkpoint-*
+avg_fitness.svg
+Digraph.gv
+Digraph.gv.svg
+speciation.svg
+__pycache__/visualize.cpython-310.pyc
