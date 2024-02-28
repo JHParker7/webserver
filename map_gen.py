@@ -2,11 +2,11 @@ import numpy as np
 import pandas as pd
 from pprint import pprint
 import pickle
-
-pd.DataFrame
+from alive_progress import alive_bar
 
 row_len = 20
 col_len = 20
+debug=False
 
 no_way_out=True
 maze_map=None
@@ -60,18 +60,18 @@ def is_there_a_way_out(to_check):
             current_y = pos[1]
             to_check=find_exit(current_x,current_y,to_check)
             if no_way_out == False:
-                print("way_out")
+                if debug == True: print("way_out")
                 return to_check
             checked.append(str(to_check.pop(0)))
             if len(to_check) == 0:
-                print("break")
+                if debug == True: print("break")
                 return to_check
         
 def remove_random_wall():
     global maze_map
     ran_row = np.random.randint(1,row_len+1)
     ran_col = np.random.randint(1,col_len+1)
-    print(maze_map)
+    if debug == True: print(maze_map)
     while maze_map[ran_row,ran_col] != 1:
         ran_row = np.random.randint(1,row_len+1)
         ran_col = np.random.randint(1,col_len+1)
@@ -91,6 +91,8 @@ def core():
     global maze_map
     global checked
     global no_way_out
+    no_way_out=True
+    maze_map=None
     maze_map=np.matrix([[1 for x in range(row_len+2)] if y==0 or y==col_len+1 else [gen_row(x,y) for x in range(row_len+2)] for y in range(col_len+2)])
     maze_map[row_len,col_len]=2
     
@@ -98,11 +100,13 @@ def core():
         to_check = [[1,1]]
         checked = []
         to_check=is_there_a_way_out(to_check)
-        print(checked)
+        if debug == True: print(checked)
         remove_random_wall()
         if no_way_out == False:
             break
     
     return maze_map
-
-pickle.dump([core() for i in range(10000)],open("training_data.pkl","wb+"))
+#print([core() for i in range(2)][1])
+num=1000
+with alive_bar(num) as bar:
+    pickle.dump([[core(), bar()][0] for i in range(num)],open("training_data.pkl","wb+"))

@@ -5,6 +5,7 @@ import visualize
 
 import numpy as np
 import pickle
+import time
 
 from alive_progress import alive_bar
 
@@ -16,8 +17,8 @@ test_per=round(data.shape[0]*0.99)
 train=data[test_per:]
 test=data[:test_per]
 
-train=data[:5]
-debug=True
+train=data[-5:]
+debug=False
 
 print(train.shape)
 print(test.shape)
@@ -54,24 +55,77 @@ def eval_genomes(genomes, config):
                         if debug==True:
                             print("not_wall")
                         cur_pos=temp_pos
-                        genome.fitness=genome.fitness+(cur_pos[0]*cur_pos[0])+(cur_pos[1]*cur_pos[1])
+                        genome.fitness=genome.fitness+((cur_pos[0]*cur_pos[0])+(cur_pos[1]*cur_pos[1]))/3
                     elif x[temp_pos[0]][temp_pos[1]]==2:
+                        print("goal!!!!")
                         if debug==True:
                             print("goal!!")
                         break
                     else:
-                        genome.fitness=genome.fitness-10
+                        genome.fitness=0-1000
                         if debug==True:
                             print("wall!!!")
+                        break
                     if debug==True:
                         print("fitness: ",genome.fitness)
                         x_1=x.copy()
                         x_1[cur_pos[0]][cur_pos[1]]=77
                         print(x_1)
-                genome.fitness = genome.fitness + ((moves_cap-moves)*100)
+                genome.fitness = genome.fitness + ((moves_cap-moves))
                 bar()
 
-
+def eval_genomes_vis(genomes, config):
+        for genome_id, genome in genomes:
+            genome.fitness = 0
+            net = neat.nn.FeedForwardNetwork.create(genome, config)
+            genome.fitness=100
+            for x in train:
+                moves=0
+                cur_pos=[0,0]
+                moves_cap=100
+                x_1=x.copy()
+                x_1[cur_pos[0]][cur_pos[1]]=77
+                print(x_1)
+                while moves<moves_cap:
+                    moves=moves+1
+                    temp_pos=cur_pos.copy()
+                    output = net.activate(np.append(np.append(x.flatten(),cur_pos),[x[cur_pos[0]+1,cur_pos[1]],x[cur_pos[0]-1,cur_pos[1]],x[cur_pos[0],cur_pos[1]+1],x[cur_pos[0],cur_pos[1]-1]]))
+                    if output[0]>1: output[0]=1
+                    elif output[0]<-1: output[0]=-1
+                    if output[1]>1: output[1]=1
+                    elif output[1]<-1: output[1]=-1
+                    temp_pos[1]=cur_pos[1]+round(output[1])
+                    temp_pos[0]=cur_pos[0]+round(output[0])
+                    if temp_pos[0]<0 and temp_pos[0]>(x.shape[0]-1): temp_pos[0]=temp_pos[0]-round(output[0])
+                    if temp_pos[1]<0 and temp_pos[1]>(x.shape[1]-1): temp_pos[1]=temp_pos[1]-round(output[1])
+                    if debug==True:
+                        print(output)
+                        print("down/up: ",round(output[1]))
+                        print("right/left: ",round(output[0]))
+                        print("wanted_pos",temp_pos)
+                        print("wall: ", x[temp_pos[0],temp_pos[1]])
+                    if x[temp_pos[0]][temp_pos[1]]==0:
+                        if debug==True:
+                            print("not_wall")
+                        cur_pos=temp_pos
+                        genome.fitness=genome.fitness+((cur_pos[0]*cur_pos[0])+(cur_pos[1]*cur_pos[1]))/3
+                    elif x[temp_pos[0]][temp_pos[1]]==2:
+                        print("goal!!!!")
+                        if debug==True:
+                            print("goal!!")
+                        break
+                    else:
+                        genome.fitness=0-1000
+                        if debug==True:
+                            print("wall!!!")
+                        break
+                    if debug==True:
+                        print("fitness: ",genome.fitness)
+                    time.sleep(1)
+                    x_1=x.copy()
+                    x_1[cur_pos[0]][cur_pos[1]]=77
+                    print(x_1)
+                genome.fitness = genome.fitness + ((moves_cap-moves))
 
 def run(config_file):
     # Load configuration.
@@ -89,7 +143,7 @@ def run(config_file):
     p.add_reporter(neat.Checkpointer(5))
 
     # Run for up to 300 generations.
-    winner = p.run(eval_genomes, 300)
+    winner = p.run(eval_genomes, 3)
 
     # Display the winning genome.
     print('\nBest genome:\n{!s}'.format(winner))
@@ -100,8 +154,8 @@ def run(config_file):
     visualize.plot_stats(stats, ylog=False, view=True)
     visualize.plot_species(stats, view=True)
 
-    p = neat.Checkpointer.restore_checkpoint('neat-checkpoint-4')
-    p.run(eval_genomes, 10)
+    p = neat.Checkpointer.restore_checkpoint("neat-checkpoint-299")
+    p.run(eval_genomes_vis, 10)
 
 
 if __name__ == '__main__':
